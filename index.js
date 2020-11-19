@@ -1,49 +1,15 @@
 const express = require("express");
 
+const docRouter = require("./routes/docRoutes");
+const userRouter = require("./routes/userRoutes");
+const morgan = require("morgan");
 const app = express();
 
-// basic routing
-// app.get("/", (req, res) => {
-//   res.status(200).send("Hello from the server side!");
-// });
+app.use(morgan("dev"));
 
-// app.post("/", (req, res) => {
-//   res
-//     .status(200)
-//     .json({ message: "Hello from the server side", app: "Natours" });
-// });
-app.get("/api/v1/docs", (req, res) => {
-  res.send("hello world");
-});
+app.use("/api/v1/docs", docRouter);
 
-app.post("/api/v1/docs", (req, res) => {
-  console.log(req.body);
-  res.send("Done");
-});
-
-app.get("/api/v1/docs/:id", (req, res) => {
-  console.log(req.params);
-
-  // const id = req.params.id * 1;
-  // const doc = docs.find((el) => el.id === id);
-});
-
-//delete request
-//docs here refer to content in a JSON file or Database
-app.delete("/api/v1/docs/:id", (req, res) => {
-  if (req.params.id * 1 > docs.length) {
-    return res.status(400).json({
-      status: "fail",
-      message: "Invalid ID",
-    });
-  }
-
-  //204 means no content
-  res.status(204).json({
-    status: "success",
-    data: { tour: "<Updated tour here...>" },
-  });
-});
+app.use("/api/v1/users", userRouter);
 
 //basic port configuration
 const port = 4000;
