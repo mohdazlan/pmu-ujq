@@ -6,11 +6,8 @@ const router = express.Router();
 const getAllDocs = (req, res) => {
   res.status(200).json({
     status: "success",
-    results: docs.length,
-    data: {
-      // the object   the data
-      pelancongan: docs,
-    },
+    //
+    message: "This route is not yet defined",
   });
 };
 

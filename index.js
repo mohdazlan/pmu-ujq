@@ -5,14 +5,22 @@ const userRouter = require("./routes/userRoutes");
 const morgan = require("morgan");
 const app = express();
 
-app.use(morgan("dev"));
+app.use(morgan("tiny"));
+app.use(express.json());
 
+//adding custom middleware
+app.use((req, res, next) => {
+  console.log("Hello from the middleware 🧻 ");
+  next();
+});
+
+// second middleware
+app.use((req, res, next) => {
+  req.requestTime = new Date().toISOString;
+  next();
+});
 app.use("/api/v1/docs", docRouter);
 
 app.use("/api/v1/users", userRouter);
 
-//basic port configuration
-const port = 4000;
-app.listen(port, () => {
-  console.log(`App running on port ${port}`);
-});
+module.exports = app;
