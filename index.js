@@ -1,26 +1,24 @@
 const express = require("express");
 
+const morgan = require("morgan");
+
+const tourRouter = require("./routes/tourRoutes");
 const docRouter = require("./routes/docRoutes");
 const userRouter = require("./routes/userRoutes");
-const morgan = require("morgan");
 const app = express();
 
-app.use(morgan("tiny"));
+//add middleware
+if (process.env.NODE_ENV === "development") {
+  app.use(morgan("tiny"));
+}
+
 app.use(express.json());
-
-//adding custom middleware
-app.use((req, res, next) => {
-  console.log("Hello from the middleware 🧻 ");
-  next();
-});
-
-// second middleware
-app.use((req, res, next) => {
-  req.requestTime = new Date().toISOString;
-  next();
-});
-app.use("/api/v1/docs", docRouter);
+app.use(express.static(`${__dirname}/public`));
 
 app.use("/api/v1/users", userRouter);
-
+// mounting a router on a new route
+app.use("/api/v1/docs", docRouter);
+app.get("/", function (req, res) {
+  res.send("Hello World!");
+});
 module.exports = app;
